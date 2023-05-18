@@ -12,12 +12,12 @@
         <v-divider></v-divider>
         <v-list density="compact" nav>
           <v-list-item
-            v-for="view in views"
-            :key="view.name"
-            :to="{ name: view.name }"
-            :prepend-icon="view.icon"
-            :title="view.title"
-            :value="view.name"
+            v-for="link in links"
+            :key="link.name"
+            :to="{ name: link.name }"
+            :prepend-icon="link.icon"
+            :title="link.title"
+            :value="link.name"
           />
         </v-list>
       </v-navigation-drawer>
@@ -30,10 +30,16 @@
 
 <script setup lang="ts">
 import { ref } from 'vue'
-import { useViewStore } from '../stores/ViewStore'
+import { useNavLinksStore } from '../stores/NavLinksStore'
 import { storeToRefs } from 'pinia'
 const drawer = ref(true)
-const viewStore = useViewStore()
-const { views } = storeToRefs(viewStore)
+const linkStore = useNavLinksStore()
+const { links } = storeToRefs(linkStore)
 const rail = ref(true)
 </script>
+
+<style>
+.drawerContainer{
+  height: 100vh;
+}
+</style>

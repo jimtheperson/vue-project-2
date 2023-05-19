@@ -1,3 +1,4 @@
-- [] add alerts system
+- [x] add alerts system
+-- [] test/fix alerts system
 - [] add connect validation
 - [] expand on websocket store

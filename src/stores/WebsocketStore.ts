@@ -1,22 +1,38 @@
 import { computed, ref, onMounted } from 'vue'
 import { defineStore } from 'pinia'
+import { useAlertStore } from './AlertStore'
+import type IDGIAlert from '@/interfaces/IDGIAlert'
 
 export const useWebsocketStore = defineStore('websocket', () => {
-  const host = ref('localhost')
-  const port = ref('')
-  const websocketAlert = ref(true)
-  const websocketConnected = ref(false)
-  const urlFullPath = ref(computed(() => `ws://${host.value}:${port.value}`))
+  const _alertStore = useAlertStore()
+  const _alertConnected: IDGIAlert = {
+    id: 'websocketConnected',
+    type: 'success',
+    title: 'System Connected!',
+    text: 'Please wait, this interface will automatically refresh...',
+    closable: true
+  }
+  const _alertDisconnected: IDGIAlert = {
+    id: 'websocketDisconnected',
+    type: 'error',
+    title: 'System Disconnected!',
+    text: 'This interface has lost communication with the server. Please, ensure the correct host and port are defined, then try again.',
+    closable: true
+  }
+  const _host = ref('localhost')
+  const _port = ref('')
+  const _websocketConnected = ref(false)
+  const _urlFullPath = ref(computed(() => `ws://${_host.value}:${_port.value}`))
   let websocket: WebSocket
 
   onMounted(() => {
     websocketConnect()
   })
   function websocketConnect() {
-    if (websocketConnected.value) {
+    if (_websocketConnected.value) {
       websocket.close()
-    } else if (host.value && port.value) {
-      websocket = new WebSocket(urlFullPath.value)
+    } else if (_host.value && _port.value) {
+      websocket = new WebSocket(_urlFullPath.value)
       websocketListen()
     } else {
       console.log('Please enter a host and port before connecting!')
@@ -26,9 +42,13 @@ export const useWebsocketStore = defineStore('websocket', () => {
     //Listen to socket open
     websocket.addEventListener('open', (event) => {
       console.log('Socket opened: ', event)
-      websocketAlert.value = false
+      _alertStore.removeAlertByID('websocketDisconnected')
+      _alertStore.pushAlert(_alertConnected)
       websocketRequestJSON()
-      setTimeout(() => (websocketConnected.value = true), 2000)
+      setTimeout(() => {
+        _alertStore.removeAlertByID('websocketConnected')
+        _websocketConnected.value = true
+      }, 2000)
     })
     // Listen to socket message
     websocket.addEventListener('message', function (event) {
@@ -38,8 +58,9 @@ export const useWebsocketStore = defineStore('websocket', () => {
     //Listen to socket close
     websocket.addEventListener('close', function (event) {
       console.log('Socket closed: ', event)
-      websocketAlert.value = true
-      websocketConnected.value = false
+      _websocketConnected.value = false
+      _alertStore.removeAlertByID('websocketConnected')
+      _alertStore.pushAlert(_alertDisconnected)
       websocketConnect()
     })
     //Listen to socket error
@@ -68,10 +89,9 @@ export const useWebsocketStore = defineStore('websocket', () => {
   function websocketConnectError() {}
 
   return {
-    host,
-    port,
-    websocketAlert,
-    websocketConnected,
+    _host,
+    _port,
+    _websocketConnected,
     websocketConnect,
     websocketCreateNewJSON,
     websocketRequestJSON,

@@ -18,6 +18,11 @@ ERRORLOGGING
 
 NAV Links
 - [x] create NavLinkStore
+-- [x] add SideNav open/close/toggle
+-- [x] add _links
+--- [] verify links with router
+--- [] add type requirements
+-- [] create history
 
 AUDIO
 - [] create AudioControlsStore
@@ -35,10 +40,23 @@ HISTORY
 - [] create HistoryStore
 
 ---COMPONENTS---
+APP BAR
+- [x] create AppBarComponent
+-- [x] link menu to SideNav
+--- [x] close icon mdi-backburger
+-- [] link back and home buttons to nav actions
+-- [] add drop down menu to three dots vertical
 
+SIDE NAV
+- [x] create SideNavComponent
+-- [] add dynamic links
+-- [] make position bottom on small screens and/or portrait
 
 ---VIEWS---
 
 CONNECT
 - [x] create ConnectView
 -- [] add connect validation
+
+SIDE NAV
+- [x] create SideNavView

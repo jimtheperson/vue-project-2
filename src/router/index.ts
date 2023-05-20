@@ -4,7 +4,7 @@ import AboutView from '../views/AboutView.vue'
 import NotFoundView from '../views/NotFoundView.vue'
 
 const router = createRouter({
-  history: createMemoryHistory(import.meta.env.BASE_URL),
+  history: createMemoryHistory(),
   routes: [
     {
       path: '/',

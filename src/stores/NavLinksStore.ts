@@ -1,5 +1,6 @@
-import { ref } from 'vue'
+import { onMounted, ref, computed } from 'vue'
 import { defineStore } from 'pinia'
+import router from "../router/index";
 // import DGIWebSocket from '@/websocket/DGIWebSocket.vue'
 
 // type NavLinks = {
@@ -9,10 +10,14 @@ import { defineStore } from 'pinia'
 // }
 
 export const useNavLinksStore = defineStore('navLinks', () => {
-    const links = ref([
+    const _links = ref([
         { name: 'home', title: 'Home', icon: 'mdi-home' },
         { name: 'about', title: 'My Account', icon: 'mdi-information' }
     ])
+    const _sideNavOpen = ref(false)
+    const _appBarTitle = ref('App Bar Title')
+    // const _routerHistory = ref()
+    // console.log(_routerHistory)
     // let links: NavLinks[]
     // async function getData() {
 
@@ -25,8 +30,23 @@ export const useNavLinksStore = defineStore('navLinks', () => {
     //     links.value = await 
         
     // }
+    onMounted(() => {
+        // router.afterEach(() => {})
+    })
+    //SideNav functions
+    function openSideNav() {
+        _sideNavOpen.value = true
+    }
+    function closeSideNav() {
+        _sideNavOpen.value = false
+    }
+    function toggleSideNav() {
+        _sideNavOpen.value = !_sideNavOpen.value
+    }
 
-    return {links}
+
+
+    return {_links, _sideNavOpen, _appBarTitle, openSideNav, closeSideNav, toggleSideNav}
 })
 
 // TODO: Add route protection - redirect if not found

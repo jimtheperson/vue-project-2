@@ -22,22 +22,36 @@ export const useWebsocketStore = defineStore('websocket', () => {
   const _host = ref('localhost')
   const _port = ref('')
   const _websocketConnected = ref(false)
+  const _websocketData = ref({})
   const _urlFullPath = ref(computed(() => `ws://${_host.value}:${_port.value}`))
   let websocket: WebSocket
 
+  //Try initial connection.
   onMounted(() => {
     websocketConnect()
   })
+  //Try connecting to a websocket at the stored _host and _port through the computed _urlFullPath reference.
+  //If it is already connected, it will disconnect. The automatic retry call will try the connection at the new URL.
   function websocketConnect() {
     if (_websocketConnected.value) {
-      websocket.close()
+      try {
+        websocket.close()
+      } catch (error) {
+        throw new Error('Error closing websocket: ' + websocket.url)
+      }
     } else if (_host.value && _port.value) {
-      websocket = new WebSocket(_urlFullPath.value)
-      websocketListen()
+      try {
+        websocket = new WebSocket(_urlFullPath.value)
+        websocketListen()
+      } catch (error) {
+        throw new Error('Error opening websocket: ' + websocket.url)
+      }
     } else {
       console.log('Please enter a host and port before connecting!')
     }
   }
+  ///Event listeners are started after a successful websocket connection is made.
+  //Events include: socket open, message from server, socket close, and socket error.
   function websocketListen() {
     //Listen to socket open
     websocket.addEventListener('open', (event) => {
@@ -53,7 +67,7 @@ export const useWebsocketStore = defineStore('websocket', () => {
     // Listen to socket message
     websocket.addEventListener('message', function (event) {
       console.log('Message from server ', event.data)
-      // eventsFromServer.value.push({ time: new Date(), data: event.data });
+      _websocketData.value = event.data
     })
     //Listen to socket close
     websocket.addEventListener('close', function (event) {
@@ -68,36 +82,34 @@ export const useWebsocketStore = defineStore('websocket', () => {
       console.log('Socket error', event)
     })
   }
-  function websocketCreateNewJSON(message: String) {}
+  //Add a new item to the server.
+  // function websocketCreateNewJSON(message: string) {}
+  //Request data from the server by path.
   function websocketRequestJSON() {
     websocket.send(JSON.stringify({ type: 'read', path: 'users' }))
   }
-  //request data for specific user
-  const websocketRequestJSONByID = (path: String, id: Number) => {
-    websocket.send(JSON.stringify({ type: 'read', path: path, id: id }))
-  }
-  // function websocketRequestJSON(path: String, id?: Number) {
+  // //Request data from the server by path and id.
+  // function websocketRequestJSONByID(path: string, id: string | number) {
+  //   websocket.send(JSON.stringify({ type: 'read', path: path, id: id }))
+  // }
+  // //Request data from the server by path and optional id.
+  // function websocketRequestJSON(path: string, id?: string | number) {
   //   if (id) {
-  //     DGIWebsocket().requestJSONByID( path, id)
+  //     DGIWebsocket().requestJSONByID(path, id)
   //   } else {
-  //     DGIWebsocket().requestJSON( path )
+  //     DGIWebsocket().requestJSON(path)
   //   }
   // }
-  function websocketUpdateJSON(message: String) {}
-  function websocketDeleteJSON(path: String, id?: Number) {}
-  function websocketReceivedUpdate() {}
-  function websocketConnectError() {}
+  // //Update the server with new data.
+  // function websocketUpdateJSON(message: String) {}
+  // //Delete data from the server.
+  // function websocketDeleteJSON(path: string, id?: string | number) {}
 
   return {
     _host,
     _port,
     _websocketConnected,
-    websocketConnect,
-    websocketCreateNewJSON,
-    websocketRequestJSON,
-    websocketUpdateJSON,
-    websocketDeleteJSON,
-    websocketReceivedUpdate,
-    websocketConnectError
+    _websocketData,
+    websocketConnect
   }
 })

@@ -21,8 +21,10 @@
           />
         </v-list>
       </v-navigation-drawer>
-      <v-main style="height: 250px">
-        <router-view />
+      <v-main style="height: 100vh">
+        <v-container>
+          <router-view />
+        </v-container>
       </v-main>
     </v-layout>
   </v-card>
@@ -39,7 +41,7 @@ const rail = ref(true)
 </script>
 
 <style>
-.drawerContainer{
+.drawerContainer {
   height: 100vh;
 }
 </style>

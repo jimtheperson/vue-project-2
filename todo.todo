@@ -1,4 +1,44 @@
-- [x] add alerts system
--- [] test/fix alerts system
-- [] add connect validation
-- [] expand on websocket store
+---STORES---
+
+WEBSOCKET
+- [x] create WebsocketStore
+-- [] add type requirements to websocketData
+-- [] add type requirements to message
+-- [] implement CRUD
+
+ALERTS
+- [x] add AlertStore
+-- [x] test/fix alerts system
+
+STATUS
+- [] create StatusStore
+
+ERRORLOGGING
+- [] create ErrorStore
+
+NAV Links
+- [x] create NavLinkStore
+
+AUDIO
+- [] create AudioControlsStore
+
+OUTPUT
+- [] create OutputStore
+
+INPUT
+- [] create InputStore
+
+LOCATION
+- [] create LocationStore - building/floor/room/?
+
+HISTORY
+- [] create HistoryStore
+
+---COMPONENTS---
+
+
+---VIEWS---
+
+CONNECT
+- [x] create ConnectView
+-- [] add connect validation

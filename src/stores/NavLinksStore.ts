@@ -1,6 +1,6 @@
-import { ref } from 'vue'
+import { onMounted, ref, computed } from 'vue'
 import { defineStore } from 'pinia'
-// import router from "../router/index";
+import router from "../router/index";
 // import DGIWebSocket from '@/websocket/DGIWebSocket.vue'
 
 // type NavLinks = {
@@ -16,6 +16,8 @@ export const useNavLinksStore = defineStore('navLinks', () => {
     ])
     const _sideNavOpen = ref(false)
     const _appBarTitle = ref('App Bar Title')
+    // const _routerHistory = ref()
+    // console.log(_routerHistory)
     // let links: NavLinks[]
     // async function getData() {
 
@@ -28,6 +30,9 @@ export const useNavLinksStore = defineStore('navLinks', () => {
     //     links.value = await 
         
     // }
+    onMounted(() => {
+        // router.afterEach(() => {})
+    })
     //SideNav functions
     function openSideNav() {
         _sideNavOpen.value = true

@@ -20,8 +20,11 @@ export const useWebsocketStore = defineStore('websocket', () => {
     closable: true
   }
   const _host = ref('localhost')
-  const _port = ref('')
+  const _port = ref('8080')
+  const _websocketConnecting = ref(false)
   const _websocketConnected = ref(false)
+  const _websocketCanceling = ref(false)
+  // const _websocketStatus = ref({ NotConnected: 0, Connecting: 1, Connected: 2, ConnectCancel: -1 })
   const _websocketData = ref({})
   const _urlFullPath = ref(computed(() => `ws://${_host.value}:${_port.value}`))
   let websocket: WebSocket
@@ -33,6 +36,8 @@ export const useWebsocketStore = defineStore('websocket', () => {
   //Try connecting to a websocket at the stored _host and _port through the computed _urlFullPath reference.
   //If it is already connected, it will disconnect. The automatic retry call will try the connection at the new URL.
   function websocketConnect() {
+    _websocketCanceling.value && (_websocketCanceling.value = false)
+    _websocketCanceling.value = false
     if (_websocketConnected.value) {
       try {
         websocket.close()
@@ -41,6 +46,7 @@ export const useWebsocketStore = defineStore('websocket', () => {
       }
     } else if (_host.value && _port.value) {
       try {
+        _websocketConnecting.value = true
         websocket = new WebSocket(_urlFullPath.value)
         websocketListen()
       } catch (error) {
@@ -61,6 +67,7 @@ export const useWebsocketStore = defineStore('websocket', () => {
       websocketRequestJSON()
       setTimeout(() => {
         _alertStore.removeAlertByID('websocketConnected')
+        _websocketConnecting.value = false
         _websocketConnected.value = true
       }, 2000)
     })
@@ -75,7 +82,8 @@ export const useWebsocketStore = defineStore('websocket', () => {
       _websocketConnected.value = false
       _alertStore.removeAlertByID('websocketConnected')
       _alertStore.pushAlert(_alertDisconnected)
-      websocketConnect()
+      _websocketCanceling.value ? _websocketConnecting.value = false : websocketConnect()
+      // websocketConnect()
     })
     //Listen to socket error
     websocket.addEventListener('error', function (event) {
@@ -108,7 +116,9 @@ export const useWebsocketStore = defineStore('websocket', () => {
   return {
     _host,
     _port,
+    _websocketConnecting,
     _websocketConnected,
+    _websocketCanceling,
     _websocketData,
     websocketConnect
   }

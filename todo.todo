@@ -60,3 +60,10 @@ CONNECT
 
 SIDE NAV
 - [x] create SideNavView
+
+HOME
+- [x] create HomeView
+-- [x] add logo
+--- [] make dynamic
+-- [] add NavLinkStore
+--- [] exclude HomeView

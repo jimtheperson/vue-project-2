@@ -18,6 +18,7 @@ export const useAlertStore = defineStore('alert', () => {
       _alerts.value.push(alert)
     } else {
       console.log('cannot push alert ' + alert.id + ' because it already exists')
+      return
     }
   }
   //Removes the last alert in the _alerts array

@@ -1,18 +1,20 @@
 <template>
   <div class="contentRowWrapper" :class="{ rowReverse: _openInfoRight }">
-    <v-card v-if="_isSelected.id">
+    <div class="buildingInfo">
+      <v-card v-if="_isSelected.id" elevation="2">
       <v-card-item>
         <v-card-title>{{ _isSelected.title }}</v-card-title>
         <v-card-subtitle>placeholder for description</v-card-subtitle>
       </v-card-item>
       <v-card-text>placeholder for data, controls, etc</v-card-text>
       <v-card-actions>
-        <v-btn variant="outlined" color="success" text="Go to controls" />
-        <!-- <v-btn variant="flat" color="error" text="Cancel" /> -->
+        <v-btn variant="outlined" color="success" prepend-icon="mdi-check" text="Accept" @click="_locationStore.setActive(_isSelected)" />
+        <v-btn variant="elevated" prepend-icon="mdi-close" text="Cancel" @click="_locationStore.setSelected({id: '', title: ''})" />
       </v-card-actions>
     </v-card>
+  </div>
 
-    <svg height="80vh" min-height="300" viewBox="0 0 26.458332 26.458334">
+    <svg viewBox="0 0 27 27" class="buildingSVG">
       <g
         transform="translate(-1.9512227,-6.5065168)"
         inkscape:groupmode="layer"
@@ -569,12 +571,13 @@
             stroke-linecap: butt;
             stroke-linejoin: miter;
             stroke-miterlimit: 4;
-            stroke-dasharray: none;
             stroke-opacity: 1;
           "
-          d="M 10.389979,32.128369 H 4.1534619"
+          d="M 10.5,32 H -100"
           id="pathFloorLabel1"
           inkscape:label="FloorLabelPath1"
+          class="floorLabelPath"
+          :class="{ floorLabelPathActive: _isSelected.id === 'b1f1' }"
         />
         <text
           xml:space="preserve"
@@ -591,8 +594,8 @@
             stroke-miterlimit: 4;
             stroke-dasharray: none;
           "
-          x="3.4267051"
-          y="39.352264"
+          x="4.5"
+          y="39.5"
           id="labelFloor1"
           inkscape:label="FloorLabel1"
           transform="scale(1.1984459,0.83441397)"
@@ -600,14 +603,15 @@
           <tspan
             sodipodi:role="line"
             id="tspan2226"
-            x="3.4267051"
-            y="39.352264"
+            x="4.5"
+            y="39.5"
             style="
               font-size: 0.79375px;
               stroke-width: 0.00389777;
               stroke-miterlimit: 4;
               stroke-dasharray: none;
             "
+            v-if="_isSelected.id != 'b1f1'"
           >
             {{ _floor1.title }}
           </tspan>
@@ -2307,19 +2311,17 @@
         </g>
         <path
           style="
-            display: inline;
-            mix-blend-mode: normal;
-
             stroke-width: 0.0675116;
             stroke-linecap: butt;
             stroke-linejoin: miter;
             stroke-miterlimit: 4;
-            stroke-dasharray: none;
             stroke-opacity: 1;
           "
-          d="M 26.346523,28.223103 H 20.110006"
+          d="M 20.2,28.223103 H 100"
           id="pathFloorLabel4"
           inkscape:label="FloorLabelPath4"
+          class="floorLabelPath"
+          :class="{ floorLabelPathActive: _isSelected.id === 'b1f4' }"
         />
         <text
           xml:space="preserve"
@@ -2340,7 +2342,7 @@
             stroke-miterlimit: 4;
             stroke-dasharray: none;
           "
-          x="21.960535"
+          x="21"
           y="34.705257"
           id="labelFloor4"
           inkscape:label="FloorLabel4"
@@ -2349,7 +2351,7 @@
           <tspan
             id="tspan2981"
             sodipodi:role="line"
-            x="21.960535"
+            x="21"
             y="34.705257"
             style="
               font-size: 0.79375px;
@@ -2359,8 +2361,9 @@
               stroke-miterlimit: 4;
               stroke-dasharray: none;
             "
+            v-if="_isSelected.id != 'b1f4'"
           >
-            4th Floor
+          {{ _floor4.title }}
           </tspan>
         </text>
       </g>
@@ -8086,24 +8089,23 @@
         <path
           inkscape:label="FloorLabelPath17"
           id="pathFloorLabel17"
-          d="M 10.49811,19.939921 H 4.2615926"
+          d="M 10.49811,19.939921 H -100"
           style="
-            display: inline;
-
             stroke-width: 0.0675116;
             stroke-linecap: butt;
             stroke-linejoin: miter;
             stroke-miterlimit: 4;
-            stroke-dasharray: none;
             stroke-opacity: 1;
           "
+          class="floorLabelPath"
+          :class="{ floorLabelPathActive: _isSelected.id === 'b1f17' }"
         />
         <text
           transform="scale(1.1984459,0.83441397)"
           inkscape:label="FloorLabel17"
           id="labelFloor17"
           y="24.745068"
-          x="3.5169306"
+          x="4.5"
           style="
             font-style: normal;
             font-weight: normal;
@@ -8128,11 +8130,12 @@
               stroke-dasharray: none;
             "
             y="24.745068"
-            x="3.5169306"
+            x="4.5"
             id="tspan2226-98"
             sodipodi:role="line"
+            v-if="_isSelected.id != 'b1f17'"
           >
-            17th Floor
+          {{ _floor17.title }}
           </tspan>
         </text>
       </g>
@@ -15319,14 +15322,31 @@ import { useLocationStore } from '../stores/LocationStore'
 const _locationStore = useLocationStore()
 const { _locations, _isSelected } = storeToRefs(_locationStore)
 const _openInfoRight = ref(false)
-// const _floor1: IDGILocation = ref(_locations.value[0].floors?.find(floor => floor.id, 'b1f1'))
 const _floor1 = ref(_locations.value[0].floors[0])
 const _floor4 = ref(_locations.value[0].floors[1])
 const _floor17 = ref(_locations.value[0].floors[2])
+
+// function getInfoPosition(elementID: string) {
+//   // const _floorPathEl = document.getElementById(elementID)
+//   const _floorPathEl = document.getElementById(elementID)!
+//   // const _floorPathEl: SVGPathElement = document.getElementById('pathFloorLabel1')?.getAttribute()
+//   // const _floorPathSVG: SVGPathElement = _floorPathEl?.
+//   const _floorPath = _floorPathEl?.getCTM()
+//   // const _x = _floorPath?.left
+//   // const _y = _floorPath?.top
+//   // const _width = _floorPath?.width
+//   console.log(_floorPath)
+//   setTimeout(() => {
+//     console.log(_floorPath)    
+//   }, 1000);
+// }
 </script>
 
 <style>
-path {
+.buildingSVG {
+  min-width: 350px;
+  min-height: 450px;
+  height: calc(95vh - 65px);
   fill: none;
   stroke: #000000;
 }
@@ -15341,5 +15361,27 @@ path {
 }
 .fillActive {
   fill: #e7d586;
+}
+.floorLabelPath {
+  stroke-dasharray: 50;
+  stroke-dashoffset: 45;
+}
+.floorLabelPathActive {
+  /* stroke-dasharray: 0; */
+  animation: pathActive 1s linear forwards;
+}
+/* .buildingInfo {
+  position: absolute;
+  top: 520px;
+  left: 200px;
+} */
+
+@keyframes pathActive {
+0% {
+  stroke-dashoffset: 45;
+}
+100% {
+  stroke-dashoffset: 0;
+}
 }
 </style>

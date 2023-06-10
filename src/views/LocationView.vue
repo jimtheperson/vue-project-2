@@ -1,24 +1,6 @@
 <template>
-  <!-- <v-container>
-
-  <v-layout>
-    <v-navigation-drawer v-model="_locationNavOpen" location="left" floating permanent>
-      <LocationListComponent />
-    </v-navigation-drawer>
-    <v-main style="height: 100%">
-      <div>
-        <LocationBuildingComponent />
-      </div>
-    </v-main>
-  </v-layout>
-  <v-btn
-    icon="mdi-office-building-marker"
-    style="margin-bottom: 10px"
-    @click="_locationNavOpen = !_locationNavOpen"
-  />
-</v-container> -->
   <div class="locationNavWrapper">
-    <v-card>
+    <v-card elevation="4">
       <v-slide-y-reverse-transition>
         <v-container v-if="_locationNavOpen">
           <LocationListComponent />
@@ -31,7 +13,6 @@
     </v-card>
   </div>
   <div>
-    <!-- <div class="contentRowWrapper"> -->
     <LocationBuildingComponent />
     <!-- <LocationRoomComponent /> -->
   </div>
@@ -50,11 +31,11 @@ const { _locationNavOpen } = storeToRefs(_locationStore)
 
 <style>
 .locationNavWrapper {
-  height: 80%;
+  height: fit-content;
   width: fit-content;
   position: fixed;
-  padding-left: 50px;
-  z-index: 1000;
+  bottom: 20px;
+  left: 20px;
   display: flex;
   flex-flow: column nowrap;
   justify-content: flex-end;

@@ -31,10 +31,13 @@ export const useNavLinksStore = defineStore('navLinks', () => {
     function toggleSideNav() {
         _sideNavOpen.value = !_sideNavOpen.value
     }
+    function setAppBarTitle(title: string) {
+        _appBarTitle.value = title
+    }
 
 
 
-    return {_links, _filteredLinks, _sideNavOpen, _appBarTitle, openSideNav, closeSideNav, toggleSideNav}
+    return {_links, _filteredLinks, _sideNavOpen, _appBarTitle, openSideNav, closeSideNav, toggleSideNav, setAppBarTitle}
 })
 
 // TODO: Add route protection - redirect if not found

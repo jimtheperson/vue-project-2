@@ -47,6 +47,21 @@
             </div>
           </div>
         </v-slide-y-reverse-transition>
+        <v-slide-y-reverse-transition>
+          <div class="floorListGroup" v-if="_buildingExpand === building.id">
+            <div v-for="room in building.rooms" :key="room.id">
+              <div class="locationListItem">
+                <div class="locationListItemPrepend" @click="_locationStore.setActive(room)">
+                  <v-icon v-if="_isActive.id === room.id" icon="mdi-check-circle" />
+                  <v-icon v-else icon="mdi-door" />
+                </div>
+                <div class="locationListItemText" @click="_locationStore.setActive(room)">
+                  <v-text style="font-size: 14pt">{{ room.title }}</v-text>
+                </div>
+              </div>
+            </div>
+          </div>
+        </v-slide-y-reverse-transition>
       </div>
   </v-slide-y-reverse-transition>
 </template>
@@ -79,14 +94,10 @@ function floorExpand(id: string) {
 
 <style>
 .buildingListGroup {
-  margin-left: 10px;
-  padding-left: 15px;
   display: flex;
   flex-flow: column nowrap;
   justify-content: flex-start;
   align-items: flex-start;
-  border-left: 1px solid black;
-  border-top-left-radius: 3px;
 }
 .floorListGroup {
   margin-left: 10px;

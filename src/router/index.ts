@@ -1,54 +1,72 @@
 import { createRouter, createMemoryHistory } from 'vue-router'
-import HomeView from '../views/HomeView.vue'
-import LocationView from "../views/LocationView.vue";
-import AudioOutputView from "../views/AudioOutputView.vue";
-import VideoOutputView from "../views/VideoOutputView.vue";
-import AboutView from '../views/AboutView.vue'
-import ControlsView from "../views/ControlsView.vue";
-import NotFoundView from '../views/NotFoundView.vue'
+
+const routes = [
+  {
+    path: '/',
+    name: 'home',
+    component: () => import('../views/HomeView.vue')
+  },
+  {
+    path: '/location',
+    name: 'location',
+    component: () => import('../views/LocationView.vue'),
+    children: [
+      {path: "building1", name: "building1", component: () => import('../components/LocationBuildingComponent.vue')},
+      {path: "floor1", name: "b1f1", component:  () => import('../components/LocationFloor1Component.vue')},
+      {path: "presSuite", name: "presSuite", component:  () => import('../components/LocationRoomPresSuiteComponent.vue')}
+    ]
+  },
+  {
+    path: '/audioOutput',
+    name: 'audioOutput',
+    component: () => import('../views/AudioOutputView.vue')
+  },
+  {
+    path: '/videoOutput',
+    name: 'videoOutput',
+    component: () => import('../views/VideoOutputView.vue')
+  },
+  {
+    path: '/controls',
+    name: 'controls',
+    component: () => import('../views/ControlsView.vue')
+  },
+  {
+    path: '/about',
+    name: 'about',
+    component: () => import('../views/AboutView.vue')
+  },
+  // {
+  //   path: '/notFound',
+  //   name: 'notFound',
+  //   component: NotFoundView
+  // },
+    // {
+  //   path: ':pathMatch(.*)*',
+  //   redirect: { name: 'notFound' }
+  //   // redirect: "../views/NotFoundView.vue"
+  //   // name: 'notFound', component: NotFoundView
+  // },
+  {
+    path: '/:pathMatch(.*)',
+    // redirect: { name: 'notFound' }
+    name: 'notFound', component: () => import('../views/NotFoundView.vue')
+  }
+]
 
 const router = createRouter({
   history: createMemoryHistory(),
-  routes: [
-    {
-      path: '/',
-      name: 'home',
-      component: HomeView
-    },
-    {
-      path: '/location',
-      name: 'location',
-      component: LocationView
-    },
-    {
-      path: '/audioOutput',
-      name: 'audioOutput',
-      component: AudioOutputView
-    },
-    {
-      path: '/videoOutput',
-      name: 'videoOutput',
-      component: VideoOutputView
-    },
-    {
-      path: '/controls',
-      name: 'controls',
-      component: ControlsView
-    },
-    {
-      path: '/about',
-      name: 'about',
-      component: AboutView
-      // route level code-splitting
-      // this generates a separate chunk (About.[hash].js) for this route
-      // which is lazy-loaded when the route is visited.
-      // component: () => import('../views/AboutView.vue')
-    },
-    {
-      path: '/:pathmatch(.*)',
-      component: NotFoundView
-    }
-  ]
+  routes
 })
+
+// router.resolve({
+//   name: "notFound",
+//   params: { pathMatch: 'notFound' }
+// }).href
+
+// router.push({
+//   name: "notFound",
+//   params: { pathMatch: ['not', 'found'] }
+// })
 
 export default router

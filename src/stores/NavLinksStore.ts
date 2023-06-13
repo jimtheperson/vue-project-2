@@ -1,6 +1,5 @@
 import { ref, computed } from 'vue'
 import { defineStore } from 'pinia'
-// import DGIWebSocket from '@/websocket/DGIWebSocket.vue'
 
 // type NavLinks = {
 //     name: string
@@ -17,6 +16,11 @@ export const useNavLinksStore = defineStore('navLinks', () => {
         { name: 'controls', title: 'Control', icon: 'mdi-gamepad' },
         { name: 'about', title: 'About', icon: 'mdi-information' }
     ])
+    // const _locationLinks = ref([
+    //     { name: 'building1', title: 'Building1', icon: 'mdi-office-building' },
+    //     { name: 'b1f1', title: 'Floor 1', icon: 'mdi-floor-plan' }
+    // ])
+
     const _sideNavOpen = ref(false)
     const _appBarTitle = ref('App Bar Title')
     const _filteredLinks = ref(computed(() => _links.value.filter(link => link.name !== 'home')))

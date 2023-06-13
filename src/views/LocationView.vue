@@ -13,20 +13,27 @@
     </v-card>
   </div>
   <div>
-    <LocationBuildingComponent />
+    <!-- <LocationBuildingComponent /> -->
     <!-- <LocationRoomComponent /> -->
+    <router-view />
   </div>
 </template>
 
 <script setup lang="ts">
+import { onBeforeMount } from "vue";
 import { storeToRefs } from 'pinia'
+import router from "../router/index";
 import { useLocationStore } from '../stores/LocationStore'
 import LocationListComponent from '../components/LocationListComponent.vue'
-import LocationBuildingComponent from '../components/LocationBuildingComponent.vue'
+// import LocationBuildingComponent from '../components/LocationBuildingComponent.vue'
 // import LocationRoomComponent from '../components/LocationRoomComponent.vue'
 
 const _locationStore = useLocationStore()
-const { _locationNavOpen } = storeToRefs(_locationStore)
+const { _locationNavOpen, _isActive } = storeToRefs(_locationStore)
+
+onBeforeMount(() => {
+  router.push({ name: _isActive.value.id })
+})
 </script>
 
 <style>

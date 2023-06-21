@@ -9,12 +9,12 @@ export const useLocationStore = defineStore('locations', () => {
   const _locations: Ref<IDGILocation[]> = ref([
     {
       id: 'building1',
-      title: 'Building1',
-      address: 'Address1',
+      title: 'Raffles Boston',
+      address: '40 Trinity Place, Boston, MA',
       floors: [
         {
           id: 'b1f1',
-          title: 'Floor 1',
+          title: 'Level 1',
           rooms: [
             { id: 'b1f1rEntryOutdoors', title: 'Entry Exterior' },
             { id: 'b1f1rEntryMez', title: 'Mezzanine' },

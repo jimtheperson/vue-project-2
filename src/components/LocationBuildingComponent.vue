@@ -1,20 +1,36 @@
 <template>
   <div class="contentRowWrapper">
-   <div class="locationInfoContainer">
-      <v-expand-transition>
+   <div v-if="_isSelected.id" class="locationInfoContainer">
          <v-card v-if="_isSelected.id" elevation="6" style="border-right: 2px solid black; border-radius: 5px;">
             <v-card-item>
             <v-card-title>{{ _isSelected.title }}</v-card-title>
             <v-card-subtitle>placeholder for description</v-card-subtitle>
             </v-card-item>
-            <v-card-text>placeholder for data, controls, etc</v-card-text>
+            <!-- <v-card-text>placeholder for data, controls, etc</v-card-text> -->
+            <!-- <v-sheet v-for="output in _outputStore.getOutputsByLocation(_isSelected.id)" :key="output.id" elevation="0">
+                <v-card-title>
+                    <v-icon v-if="output.type === 'audio'" icon="mdi-speaker" />
+                    <v-icon v-else-if="output.type === 'video'" icon="mdi-monitor" />
+                    <v-icon v-else-if="output.type === 'audio-video'" icon="mdi-monitor-speaker" />
+                    {{ output.title }}
+                </v-card-title>
+            </v-sheet> -->
+            <!-- <v-sheet v-for="output in _outputStore.getOutputsByLocation(_isSelected.rooms?.forEach(function (id) { return id }))" :key="output.id" elevation="0"> -->
+            <!-- <v-sheet v-for="output in _outputStore.getOutputsByLocation()" :key="output.id" elevation="0">
+                <v-card-title>
+                    <v-icon v-if="output.type === 'audio'" icon="mdi-speaker" />
+                    <v-icon v-else-if="output.type === 'video'" icon="mdi-monitor" />
+                    <v-icon v-else-if="output.type === 'audio-video'" icon="mdi-monitor-speaker" />
+                    {{ output.title }}
+                </v-card-title>
+            </v-sheet> -->
             <v-card-actions>
             <v-btn variant="outlined" color="success" prepend-icon="mdi-check" text="Accept" @click="_locationStore.setActive(_isSelected)" />
             <v-btn variant="elevated" prepend-icon="mdi-close" text="Cancel" @click="_locationStore.setSelected({id: '', title: ''})" />
             </v-card-actions>
          </v-card>
-      </v-expand-transition>
    </div>
+
    <svg
    xmlns:dc="http://purl.org/dc/elements/1.1/"
    xmlns:cc="http://creativecommons.org/ns#"
@@ -960,9 +976,10 @@
 </template>
 
 <script setup lang="ts">
-import { ref } from 'vue'
+import { ref, computed } from 'vue'
 import { storeToRefs } from 'pinia'
 import { useLocationStore } from '../stores/LocationStore'
+import { useOutputStore } from '../stores/OutputStore'
 
 const _locationStore = useLocationStore()
 const { _locations, _isSelected } = storeToRefs(_locationStore)
@@ -972,12 +989,25 @@ const _floor17 = ref(_locations.value[0].floors![2])
 const _floor18 = ref(_locations.value[0].floors![3])
 const _floor19 = ref(_locations.value[0].floors![4])
 const _floor21 = ref(_locations.value[0].floors![5])
+const _outputStore = useOutputStore()
+
+// const _outputs = ref(computed(() => _isSelected.value.floors.))
+function getFloorOutputs() {
+   for (let output = 0; output < _isSelected.value.rooms!.length; output++) {
+      const _locationOutputs = _isSelected.value.rooms![output];
+      return _locationOutputs
+   }
+}
+
 
 </script>
 
 <style>
 .locationInfoContainer {
    height: 100%;
+   width: 80%;
+   min-width: 300px;
+   margin-left: 20px;
 }
 .buildingSVG {
   min-width: 400px;

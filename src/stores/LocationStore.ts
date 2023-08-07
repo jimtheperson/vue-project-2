@@ -1,8 +1,8 @@
 import { ref, type Ref, onBeforeMount } from 'vue'
 import { defineStore } from 'pinia'
-import { useRouter } from "vue-router";
+import { useRouter } from 'vue-router'
 import type IDGILocation from '../interfaces/IDGILocation'
-import { useNavLinksStore } from "./NavLinksStore";
+import { useNavLinksStore } from './NavLinksStore'
 // import router from "../router/index";
 
 export const useLocationStore = defineStore('locations', () => {

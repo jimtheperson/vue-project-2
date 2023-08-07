@@ -35,7 +35,28 @@ const { _count } = storeToRefs(useAlertStore())
   display: flex;
   flex-flow: row;
   align-items: center;
-  justify-content: center;
+  justify-content: flex-start;
+}
+.rowFlexStart {
+  /* width: 100%; */
+  display: flex;
+  flex-flow: row wrap;
+  align-items: center;
+  justify-content: flex-start;
+}
+.rowFlexEnd {
+  /* width: 100%; */
+  display: flex;
+  flex-flow: row wrap;
+  align-items: center;
+  justify-content: flex-end;
+}
+.rowFlexSpaceBetween {
+  /* width: 100%; */
+  display: flex;
+  flex-flow: row wrap;
+  align-items: center;
+  justify-content: space-between;
 }
 .rowReverse {
   flex-flow: row-reverse;
